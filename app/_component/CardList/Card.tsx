@@ -19,9 +19,9 @@ export default function Card({
           className="h-[72%] w-[46%] rounded-[4px] border-[0.5px] border-gray-200"
         />
       </div>
-      <div>{member_name_en}</div>
-      <div>{name_en}</div>
-      <div>{price} USD</div>
+      <div className="text-gray-400 text-xs">{member_name_en}</div>
+      <div className="text-[13px] line-clamp-2 break-words">{name_en}</div>
+      <div className="text-sm pt-5 font-semibold">{price} USD</div>
     </section>
   );
 }

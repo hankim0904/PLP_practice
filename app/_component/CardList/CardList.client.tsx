@@ -5,6 +5,7 @@ import { useInView } from "react-intersection-observer";
 import { ISearchCard, ISearchResponse } from "@/types/search";
 import { getSearchDataClient } from "@/app/_lib/api";
 import Card from "./Card";
+import CardListSkeleton from "./CardSkeleton";
 
 interface CardListClientProps {
   initialData: ISearchResponse;
@@ -50,11 +51,8 @@ export default function CardListClient({
             <Card cardInfo={card} />
           </li>
         ))}
-        {isFetchingNextPage &&
-          Array.from({ length: 20 }).map((_, i) => (
-            <li key={`skeleton-${i}`}>스켈레톤</li>
-          ))}
       </ul>
+      <div className="pt-6">{isFetchingNextPage && <CardListSkeleton />}</div>
       <div ref={ref} className="h-1"></div>
     </>
   );
