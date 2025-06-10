@@ -2,6 +2,7 @@ import { Suspense } from "react";
 import CardListServer from "./_component/CardList/CardList.server";
 import SearchBar from "./_component/SearchBar/SearchBar";
 import CardListSkeleton from "./_component/CardList/CardSkeleton";
+import GroupFilter from "./_component/GroupFilter/GroupFilter";
 
 export default function Home({
   searchParams,
@@ -12,6 +13,7 @@ export default function Home({
     <div className="w-screen bg-red-100 flex justify-center">
       <div className="w-full h-screen lg:max-w-[425px] bg-white px-4 overflow-auto">
         <SearchBar />
+        <GroupFilter />
         <Suspense
           key={JSON.stringify(searchParams)}
           fallback={<CardListSkeleton />}
