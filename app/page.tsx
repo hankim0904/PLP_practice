@@ -1,5 +1,5 @@
-import CardListServer from "./_component/CardList.server";
-import SearchBar from "./_component/SearchBar";
+import CardListServer from "./_component/CardList/CardList.server";
+import SearchBar from "./_component/SearchBar/SearchBar";
 
 export default function Home({
   searchParams,

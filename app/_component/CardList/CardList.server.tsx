@@ -1,4 +1,4 @@
-import { getSearchDataServer } from "../_lib/api";
+import { getSearchDataServer } from "@/app/_lib/api";
 import CardListClient from "./CardList.client";
 
 export default async function CardListServer({

@@ -2,9 +2,9 @@
 
 import { useInfiniteQuery } from "@tanstack/react-query";
 import { useInView } from "react-intersection-observer";
-import { getSearchDataClient } from "../_lib/api";
-import Card from "./Card";
 import { ISearchCard, ISearchResponse } from "@/types/search";
+import { getSearchDataClient } from "@/app/_lib/api";
+import Card from "./Card";
 
 interface CardListClientProps {
   initialData: ISearchResponse;
@@ -43,14 +43,19 @@ export default function CardListClient({
   const cards: ISearchCard[] = data.pages.flatMap((page) => page.data.results);
 
   return (
-    <ul className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-2 gap-x-3 gap-y-6">
-      {cards.map((card, index) => (
-        <li key={`${card.id}${index}`}>
-          <Card cardInfo={card} />
-        </li>
-      ))}
-      {isFetchingNextPage && <div>로딩 중....</div>}
-      <div ref={ref} className="h-20"></div>
-    </ul>
+    <>
+      <ul className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-2 gap-x-3 gap-y-6">
+        {cards.map((card, index) => (
+          <li key={`${card.id}${index}`}>
+            <Card cardInfo={card} />
+          </li>
+        ))}
+        {isFetchingNextPage &&
+          Array.from({ length: 20 }).map((_, i) => (
+            <li key={`skeleton-${i}`}>스켈레톤</li>
+          ))}
+      </ul>
+      <div ref={ref} className="h-1"></div>
+    </>
   );
 }
