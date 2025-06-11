@@ -44,7 +44,7 @@ export default function CardListClient({
   const cards: ISearchCard[] = data.pages.flatMap((page) => page.data.results);
 
   return (
-    <>
+    <section className="py-4">
       <ul className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-2 gap-x-3 gap-y-6">
         {cards.map((card, index) => (
           <li key={`${card.id}${index}`}>
@@ -54,6 +54,6 @@ export default function CardListClient({
       </ul>
       <div className="pt-6">{isFetchingNextPage && <CardListSkeleton />}</div>
       <div ref={ref} className="h-1"></div>
-    </>
+    </section>
   );
 }
