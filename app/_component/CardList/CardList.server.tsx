@@ -4,7 +4,7 @@ import CardListClient from "./CardList.client";
 export default async function CardListServer({
   searchParams,
 }: {
-  searchParams: Promise<{ [key: string]: string }>;
+  searchParams: { [key: string]: string };
 }) {
   const resolvedSearchParams = await searchParams;
 

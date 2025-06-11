@@ -1,31 +1,31 @@
-import { getGroupData } from "@/app/_lib/api";
-import { IGroup } from "@/types/group";
-import GroupCircle from "./GroupCircle";
+import { getGroupData, getMemberData } from "@/app/_lib/api";
+import { IGroup, IMember } from "@/types/group";
+import GroupSwiper from "./GroupSwiper";
 
-export default async function GroupFilter() {
-  const GroupData = await getGroupData();
-  const GroupList: IGroup[] = GroupData.data.groups || [];
+export default async function GroupFilter({
+  searchParams,
+}: {
+  searchParams: { [key: string]: string };
+}) {
+  const groupData = await getGroupData();
+  const groupList: IGroup[] = groupData.data.groups || [];
+  const groupId = Number(searchParams.group);
 
-  return (
-    <section className="flex">
-      <div>
-        <GroupCircle
-          groupInfo={{
-            name: "See All",
-            image: "/images/group-all-icon.svg",
-            name_en: "See All",
-          }}
-        />
-      </div>
-      <div className="overflow-x-auto">
-        <ul className="flex">
-          {GroupList.map((group) => (
-            <li key={group.id}>
-              <GroupCircle groupInfo={group} />
-            </li>
-          ))}
-        </ul>
-      </div>
-    </section>
-  );
+  if (!groupId)
+    return (
+      <GroupSwiper
+        mainBadge={{
+          name: "See All",
+          image: "/images/group-all-icon.svg",
+          name_en: "See All",
+        }}
+        badgeList={groupList}
+      />
+    );
+
+  const selectedGroup = groupList.find((item) => item.id === groupId)!;
+  const memberData = await getMemberData(groupId);
+  const memberList: IMember[] = memberData.data.members || [];
+
+  return <GroupSwiper mainBadge={selectedGroup} badgeList={memberList} />;
 }
