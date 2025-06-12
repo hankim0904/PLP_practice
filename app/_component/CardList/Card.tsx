@@ -4,11 +4,13 @@ import Image from "next/image";
 interface CardProps {
   cardInfo: ISearchCard;
   isHeartOn: boolean;
+  onClick: (id: number) => void;
 }
 
 export default function Card({
-  cardInfo: { image, name_en, price, member_name_en },
+  cardInfo: { id, image, name_en, price, member_name_en },
   isHeartOn,
+  onClick,
 }: CardProps) {
   return (
     <section>
@@ -26,6 +28,7 @@ export default function Card({
           width={20}
           height={20}
           className="absolute bottom-2 right-2 cursor-pointer"
+          onClick={() => onClick(id)}
         />
       </div>
       <div className="text-gray-400 text-xs">{member_name_en}</div>

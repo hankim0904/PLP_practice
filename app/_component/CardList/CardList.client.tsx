@@ -1,9 +1,18 @@
 "use client";
 
-import { useInfiniteQuery, useQuery } from "@tanstack/react-query";
+import {
+  useInfiniteQuery,
+  useMutation,
+  useQuery,
+  useQueryClient,
+} from "@tanstack/react-query";
 import { useInView } from "react-intersection-observer";
 import { ISearchCard, ISearchResponse } from "@/types/search";
-import { getSearchDataClient, getWishIdList } from "@/app/_lib/api";
+import {
+  getSearchDataClient,
+  getWishIdList,
+  postWishToggle,
+} from "@/app/_lib/api";
 import Card from "./Card";
 import CardListSkeleton from "./CardSkeleton";
 import { useSession } from "next-auth/react";
@@ -18,6 +27,7 @@ export default function CardListClient({
   searchParams,
 }: CardListClientProps) {
   const { data: session } = useSession();
+  const queryClient = useQueryClient();
 
   const { data, fetchNextPage, hasNextPage, isFetchingNextPage } =
     useInfiniteQuery({
@@ -52,7 +62,43 @@ export default function CardListClient({
     enabled: !!session?.accessToken,
   });
 
-  const wishList = wishListData.data.results || [];
+  const wishList = wishListData?.data.results || [];
+
+  const { mutate: wishMutate } = useMutation({
+    mutationKey: ["wishMutate"],
+    mutationFn: (id: number) => postWishToggle(id, session?.accessToken),
+    onError: (err, _, context) => {
+      queryClient.setQueryData(["wishMutate"], context);
+    },
+    onSuccess: (data, id) => {
+      queryClient.setQueryData<{ data: { results: number[] } }>(
+        ["wishList"],
+        (old) => {
+          if (!old) return old;
+
+          const currentList = old.data.results || [];
+          const isWishOn = currentList.includes(id);
+
+          return {
+            ...old,
+            data: {
+              ...old.data,
+              results: isWishOn
+                ? currentList.filter((itemId) => itemId !== id)
+                : [...currentList, id],
+            },
+          };
+        }
+      );
+    },
+  });
+
+  const handleWishToggle = (id: number) => {
+    if (!session?.accessToken) {
+      return;
+    }
+    wishMutate(id);
+  };
 
   return (
     <section className="py-4">
@@ -61,7 +107,11 @@ export default function CardListClient({
           const isHeartOn = wishList.includes(card.id);
           return (
             <li key={`${card.id}${index}`}>
-              <Card cardInfo={card} isHeartOn={isHeartOn} />
+              <Card
+                cardInfo={card}
+                isHeartOn={isHeartOn}
+                onClick={handleWishToggle}
+              />
             </li>
           );
         })}
