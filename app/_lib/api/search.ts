@@ -9,7 +9,7 @@ export async function getSearchData(params: { [key: string]: string }) {
     const res = await fetch(
       `${process.env.NEXT_PUBLIC_API_URL}/card/gb/v2/search?${queryString}`,
       {
-        next: { revalidate: 60 },
+        next: { revalidate: 60 * 5 },
       }
     );
 
