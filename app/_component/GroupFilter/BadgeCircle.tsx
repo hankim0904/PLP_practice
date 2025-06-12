@@ -30,6 +30,7 @@ export default function BadgeCircle({
           ? `/?group=${currentGroup}&member=${badgeInfo.id}`
           : `/?group=${badgeInfo.id}`
       }
+      prefetch={false}
     >
       <div className="flex flex-col items-center w-[56px] gap-[2px] mr-2">
         <Image

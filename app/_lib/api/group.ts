@@ -18,7 +18,7 @@ export async function getGroupData() {
 
 export async function getMemberData(groupId: number) {
   try {
-    await delay(1500);
+    await delay(1000);
     const res = await fetch(
       `${process.env.NEXT_PUBLIC_API_URL}/card/gb/v1/group/${groupId}/member`,
       {

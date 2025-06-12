@@ -33,7 +33,7 @@ export default function SearchBar() {
         value={keyword}
         onChange={(e) => setKeyword(e.target.value)}
         placeholder="Search your favorite photocards"
-        className="w-full bg-gray-50 rounded-[18px] py-2 px-[15px] my-1"
+        className="w-full bg-gray-50 rounded-[18px] py-2 px-[15px] my-1 outline-none"
       />
     </form>
   );
