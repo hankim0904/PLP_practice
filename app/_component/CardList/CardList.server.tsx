@@ -1,4 +1,4 @@
-import { getSearchDataServer } from "@/app/_lib/api";
+import { getSearchData } from "@/app/_lib/api/search";
 import CardListClient from "./CardList.client";
 
 export default async function CardListServer({
@@ -6,17 +6,12 @@ export default async function CardListServer({
 }: {
   searchParams: { [key: string]: string };
 }) {
-  const resolvedSearchParams = await searchParams;
-
-  const initialData = await getSearchDataServer({
+  const initialData = await getSearchData({
     page: "1",
-    ...resolvedSearchParams,
+    ...searchParams,
   });
 
   return (
-    <CardListClient
-      initialData={initialData}
-      searchParams={resolvedSearchParams}
-    />
+    <CardListClient initialData={initialData} searchParams={searchParams} />
   );
 }

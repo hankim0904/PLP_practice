@@ -8,14 +8,11 @@ import {
 } from "@tanstack/react-query";
 import { useInView } from "react-intersection-observer";
 import { ISearchCard, ISearchResponse } from "@/types/search";
-import {
-  getSearchDataClient,
-  getWishIdList,
-  postWishToggle,
-} from "@/app/_lib/api";
 import Card from "./Card";
 import CardListSkeleton from "./CardSkeleton";
 import { useSession } from "next-auth/react";
+import { getSearchData } from "@/app/_lib/api/search";
+import { getWishIdList, postWishToggle } from "@/app/_lib/api/wish";
 
 interface CardListClientProps {
   initialData: ISearchResponse;
@@ -29,11 +26,11 @@ export default function CardListClient({
   const { data: session } = useSession();
   const queryClient = useQueryClient();
 
-  const { data, fetchNextPage, hasNextPage, isFetchingNextPage } =
+  const { data, fetchNextPage, hasNextPage, isFetchingNextPage, isLoading } =
     useInfiniteQuery({
       queryKey: ["cards", searchParams],
       queryFn: async ({ pageParam = 1 }) => {
-        return await getSearchDataClient({
+        return await getSearchData({
           page: pageParam.toString(),
           ...searchParams,
         });
@@ -116,7 +113,9 @@ export default function CardListClient({
           );
         })}
       </ul>
-      <div className="pt-6">{isFetchingNextPage && <CardListSkeleton />}</div>
+      <div className="pt-6">
+        {(isFetchingNextPage || isLoading) && <CardListSkeleton />}
+      </div>
       <div ref={ref} className="h-1"></div>
     </section>
   );

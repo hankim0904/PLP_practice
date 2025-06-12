@@ -1,6 +1,6 @@
-import { getGroupData, getMemberData } from "@/app/_lib/api";
 import { IGroup, IMember } from "@/types/group";
 import GroupSwiper from "./GroupSwiper";
+import { getGroupData, getMemberData } from "@/app/_lib/api/group";
 
 export default async function GroupFilter({
   searchParams,

@@ -1,10 +1,10 @@
 import { NextAuthOptions } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
-import { signInEmail } from "@/app/_lib/api";
 import { cookieOption } from "./_lib/cookieOption";
 import { generateEmailUserResponse } from "./_lib/generateEmailUserResponse";
 import { refreshToken } from "./_lib/refreshToken";
 import { parseTokenToSession } from "./_lib/parseTokenToSession";
+import { signInEmail } from "@/app/_lib/api/signin";
 
 export const EXPIRE_TIME_SECOND = 3600;
 
@@ -51,11 +51,6 @@ export const authOptions: NextAuthOptions = {
         return { ...token };
       }
 
-      /**
-       * @notice
-       * refreshToken 함수 호출 시에 cookies() 의 값을 변경하게 돠고
-       * 해당 토큰을 사용하는 API들의 cache를 invalid
-       */
       if (!token.refreshToken) throw new Error("Refresh Token is not existed");
       const { access } = await refreshToken({
         params: { refresh: token.refreshToken },
