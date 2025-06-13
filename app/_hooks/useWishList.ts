@@ -10,22 +10,23 @@ export function useWishList() {
     queryKey: ["wishList"],
     queryFn: () => getWishIdList(session?.accessToken),
     enabled: !!session?.accessToken,
+    staleTime: 0,
+    refetchOnWindowFocus: true,
   });
 
   const wishList = wishListData?.data.results || [];
 
   const { mutate: wishMutate } = useMutation({
-    mutationKey: ["wishMutate"],
     mutationFn: (id: number) => postWishToggle(id, session?.accessToken),
-    onError: (err, _, context) => {
-      queryClient.setQueryData(["wishMutate"], context);
-    },
-    onSuccess: (data, id) => {
+    onMutate: async (id) => {
+      await queryClient.cancelQueries({ queryKey: ["wishList"] });
+
+      const previousWishList = queryClient.getQueryData(["wishList"]);
+
       queryClient.setQueryData<{ data: { results: number[] } }>(
         ["wishList"],
         (old) => {
           if (!old) return old;
-
           const currentList = old.data.results || [];
           const isWishOn = currentList.includes(id);
 
@@ -40,6 +41,11 @@ export function useWishList() {
           };
         }
       );
+
+      return { previousWishList };
+    },
+    onError: (err, id, context) => {
+      queryClient.setQueryData(["wishList"], context?.previousWishList);
     },
   });
 

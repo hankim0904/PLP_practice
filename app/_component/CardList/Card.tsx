@@ -1,3 +1,4 @@
+"use client";
 import { ISearchCard } from "@/types/search";
 import Image from "next/image";
 

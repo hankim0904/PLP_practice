@@ -1,15 +1,13 @@
-import { delay } from "@/app/util/delay";
 import qs from "query-string";
 
 export async function getSearchData(params: { [key: string]: string }) {
   try {
     const queryString = qs.stringify(params);
-    await delay(500);
 
     const res = await fetch(
       `${process.env.NEXT_PUBLIC_API_URL}/card/gb/v2/search?${queryString}`,
       {
-        next: { revalidate: 60 * 5 },
+        next: { revalidate: 60 * 15 },
       }
     );
 
