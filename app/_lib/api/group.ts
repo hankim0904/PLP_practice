@@ -1,8 +1,5 @@
-import { delay } from "@/app/util/delay";
-
 export async function getGroupData() {
   try {
-    await delay(1000);
     const res = await fetch(
       `${process.env.NEXT_PUBLIC_API_URL}/card/gb/v1/group`,
       {
@@ -18,7 +15,6 @@ export async function getGroupData() {
 
 export async function getMemberData(groupId: number) {
   try {
-    await delay(1000);
     const res = await fetch(
       `${process.env.NEXT_PUBLIC_API_URL}/card/gb/v1/group/${groupId}/member`,
       {
