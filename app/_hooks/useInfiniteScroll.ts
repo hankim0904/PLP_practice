@@ -17,6 +17,7 @@ export function useInfiniteScroll({
         onLoadMore();
       }
     },
+    threshold: 1,
   });
 
   return { ref };

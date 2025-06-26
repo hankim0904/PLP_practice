@@ -6,12 +6,14 @@ interface CardProps {
   cardInfo: ISearchCard;
   isHeartOn: boolean;
   onClick: (id: number) => void;
+  onImageLoad?: () => void;
 }
 
 export default function Card({
   cardInfo: { id, image, name_en, price, member_name_en },
   isHeartOn,
   onClick,
+  onImageLoad,
 }: CardProps) {
   return (
     <section>
@@ -22,6 +24,7 @@ export default function Card({
           width={72}
           height={114}
           className="h-[72%] w-[46%] rounded-[4px] border-[0.5px] border-gray-200"
+          onLoad={onImageLoad}
         />
         <Image
           src={`/icons/heart_${isHeartOn ? "red" : "gray"}.svg`}

@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from "react";
 import { ISearchResponse } from "@/types/search";
 import Card from "./Card";
 import CardListSkeleton from "./CardSkeleton";
@@ -31,6 +32,12 @@ export default function CardListClient({
     isFetchingNextPage,
   });
 
+  const [loadedCount, setLoadedCount] = useState(0);
+  const handleImageLoad = () => {
+    setLoadedCount((prev) => prev + 1);
+  };
+  // const allImagesLoaded = loadedCount === cards.length && cards.length > 0;
+
   return (
     <section className="py-4">
       {cards.length === 0 ? (
@@ -45,6 +52,7 @@ export default function CardListClient({
                   cardInfo={card}
                   isHeartOn={isHeartOn}
                   onClick={handleWishToggle}
+                  onImageLoad={handleImageLoad}
                 />
               </li>
             );
@@ -52,7 +60,9 @@ export default function CardListClient({
         </ul>
       )}
       <div className="pt-6">{isFetchingNextPage && <CardListSkeleton />}</div>
-      <div ref={ref} className="h-1"></div>
+      {loadedCount > 1 && !isFetchingNextPage && (
+        <div ref={ref} className="h-1 bg-amber-600"></div>
+      )}
     </section>
   );
 }
